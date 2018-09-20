@@ -5,9 +5,12 @@ import android.widget.Toast;
 
 public class CRIFData {
 
-    public static void UPLOAD_DATA(Context c, String message){
+    private Context context;
 
-        Toast.makeText(c,message,Toast.LENGTH_SHORT).show();
+    public static void UPLOAD_DATA(Context context, String message) {
+
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
 
     }
 }
