@@ -38,7 +38,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name="crif.android.sdk.DownloadService" >
+        <service android:name="crif.android.sdk.DownloadService" android:exported="true" >
+            <intent-filter >
+                <action android:name="MYSERVICE"/>
+            </intent-filter>
         </service>
     </application>
 
