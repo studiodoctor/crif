@@ -18,22 +18,25 @@ public class DownloadService extends IntentService {
 
     public DownloadService() {
         super("MyService");
+        Toast.makeText(this, "Constructor", Toast.LENGTH_SHORT).show();
     }
 
     public class LocalBinder extends Binder {
         DownloadService getService() {
+            Toast.makeText(getApplicationContext(), "LocalBinder", Toast.LENGTH_SHORT).show();
             return DownloadService.this;
         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Toast.makeText(this, "onBind", Toast.LENGTH_SHORT).show();
         return binder;
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onHandleIntent", Toast.LENGTH_SHORT).show();
     }
 
     public Date getCurrentDate() {

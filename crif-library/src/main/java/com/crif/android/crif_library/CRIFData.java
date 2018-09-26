@@ -14,7 +14,7 @@ public class CRIFData {
 
     public static void UPLOAD_DATA(Context context, String message) {
 
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
 
         Intent intent = new Intent(context, DownloadService.class);
@@ -28,6 +28,7 @@ public class CRIFData {
             DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
             localService = binder.getService();
             isBound = true;
+
         }
 
         @Override
