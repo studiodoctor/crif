@@ -1,5 +1,6 @@
 package com.crif.android.crif_library;
 
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +18,9 @@ public class CRIFData {
       //  Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
 
-        Intent intent = new Intent(context, DownloadService.class);
-        context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        Intent playerservice = new Intent();
+        playerservice.setAction("MYSERVICE");
+        context.bindService(playerservice,connection , Service.BIND_AUTO_CREATE);
 
     }
 
