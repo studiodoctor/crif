@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.crif.android.crif_library.DownloadService;
+
 public class Master extends AppCompatActivity {
 
     Context context;
@@ -23,4 +25,7 @@ public class Master extends AppCompatActivity {
 
         context.startService(intent);
     }
+
+
+
 }
