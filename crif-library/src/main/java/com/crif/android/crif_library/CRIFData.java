@@ -30,8 +30,8 @@ public class CRIFData {
         // context.bindService(playerservice,connection , Service.BIND_AUTO_CREATE);
 
         Intent intent = new Intent("com.crif.android.crif_library.DownloadService");
-
-        context.bindService(createExplicitFromImplicitIntent(context, intent), connection, Context.BIND_AUTO_CREATE);
+        intent.setPackage("com.crif.android.crif_library");
+        context.startService(intent);
 
     }
 
