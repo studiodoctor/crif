@@ -40,7 +40,7 @@
 
         <service android:name="com.crif.android.crif_library.DownloadService"
             android:process=":CrifRemoteProcess"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="myService.RemoteService"/>
                 <category android:name="android.intent.category.DEFAULT"/>
