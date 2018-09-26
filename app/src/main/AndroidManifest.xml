@@ -38,9 +38,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.crif.android.crif_library.DownloadService" android:exported="true" >
-            <intent-filter >
-                <action android:name="MYSERVICE"/>
+        <service android:name="com.crif.android.crif_library.DownloadService"
+            android:process=":CrifRemoteProcess"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="myService.RemoteService"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
     </application>

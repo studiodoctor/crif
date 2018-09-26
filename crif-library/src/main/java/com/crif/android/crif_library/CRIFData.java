@@ -1,6 +1,5 @@
 package com.crif.android.crif_library;
 
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,32 +17,46 @@ public class CRIFData {
 
     public static void UPLOAD_DATA(Context context, String message) {
 
-      //  Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
 
-        Intent playerservice = new Intent();
-        playerservice.setAction("com.crif.android.crif_library.DownloadService");
+//        Intent playerservice = new Intent();
+//        playerservice.setAction("com.crif.android.crif_library.DownloadService");
+//
+//        Intent explicitIntent = convertImplicitIntentToExplicitIntent(playerservice, context);
+//        if(explicitIntent != null){
+//            context.startService(explicitIntent);
+//        }
+        // context.bindService(playerservice,connection , Service.BIND_AUTO_CREATE);
 
-        Intent explicitIntent = convertImplicitIntentToExplicitIntent(playerservice, context);
-        if(explicitIntent != null){
-            context.startService(explicitIntent);
-        }
+        Intent intent = new Intent("com.crif.android.crif_library.DownloadService");
 
-       // context.bindService(playerservice,connection , Service.BIND_AUTO_CREATE);
+        context.bindService(createExplicitFromImplicitIntent(context, intent), connection, Context.BIND_AUTO_CREATE);
 
     }
 
-    public static Intent convertImplicitIntentToExplicitIntent(Intent implicitIntent, Context context) {
+    public static Intent createExplicitFromImplicitIntent(Context context, Intent implicitIntent) {
+        //Retrieve all services that can match the given intent
         PackageManager pm = context.getPackageManager();
-        List<ResolveInfo> resolveInfoList = pm.queryIntentServices(implicitIntent, 0);
+        List<ResolveInfo> resolveInfo = pm.queryIntentServices(implicitIntent, 0);
 
-        if (resolveInfoList == null || resolveInfoList.size() != 1) {
+        //Make sure only one match was found
+        if (resolveInfo == null || resolveInfo.size() != 1) {
             return null;
         }
-        ResolveInfo serviceInfo = resolveInfoList.get(0);
-        ComponentName component = new ComponentName(serviceInfo.serviceInfo.packageName, serviceInfo.serviceInfo.name);
+
+        //Get component info and create ComponentName
+        ResolveInfo serviceInfo = resolveInfo.get(0);
+        String packageName = serviceInfo.serviceInfo.packageName;
+        String className = serviceInfo.serviceInfo.name;
+        ComponentName component = new ComponentName(packageName, className);
+
+        //Create a new intent. Use the old one for extras and such reuse
         Intent explicitIntent = new Intent(implicitIntent);
+
+        //Set the component to be explicit
         explicitIntent.setComponent(component);
+
         return explicitIntent;
     }
 
