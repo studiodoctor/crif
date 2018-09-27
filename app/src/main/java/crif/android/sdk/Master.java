@@ -1,13 +1,15 @@
 package crif.android.sdk;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Toast;
 
-import com.crif.android.crif_library.DownloadService;
+import com.crif.android.crif_library.CRIFData;
+import com.crif.android.crif_library.DataInterface;
 
-public class Master extends AppCompatActivity {
+public class Master extends AppCompatActivity implements DataInterface {
 
     Context context;
 
@@ -16,16 +18,18 @@ public class Master extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master);
 
+        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CRIFData.UPLOAD_DATA(Master.this, "13");
+            }
+        });
 
     }
+    @Override
+    public void callfromlibrary() {
 
-    public static void START_SERVICE(Context context) {
+        Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(context, DownloadService.class);
-
-        context.startService(intent);
     }
-
-
-
 }
