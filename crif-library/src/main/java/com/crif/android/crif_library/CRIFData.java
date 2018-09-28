@@ -9,13 +9,15 @@ public class CRIFData {
 
     public static DownloadService localService;
     public static boolean isBound = false;
+    public static GoogleAccountCredential googleAccountCredential;
 
-    public static void UPLOAD_DATA(Context context, String id,String noOfWeeks, GoogleAccountCredential googleCredentials) {
+    public static void UPLOAD_DATA(Context context, String id, String noOfWeeks, GoogleAccountCredential googleCredentials) {
 
         Intent intent = new Intent(context, DownloadService.class);
         intent.putExtra("Id", id);
         intent.putExtra("Weeks", noOfWeeks);
-        intent.putExtra("GoogleCredentials", String.valueOf(googleCredentials));
+        googleAccountCredential = googleCredentials;
+        //intent.putExtra("GoogleCredentials", String.valueOf(googleCredentials));
         context.startService(intent);
 
     }
