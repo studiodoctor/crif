@@ -18,6 +18,4 @@ public class CRIFData {
         context.startService(intent);
 
     }
-
-
 }
