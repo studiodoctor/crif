@@ -127,7 +127,7 @@ public class DownloadService extends IntentService {
         id = intent.getStringExtra("Id");
         noOfWeeks = Integer.parseInt(intent.getStringExtra("Weeks"));
         googleCredentials = (GoogleAccountCredential) intent.getSerializableExtra("googleCredentials");
-
+        Log.e("Google Data", String.valueOf(googleCredentials));
         Handler mHandler = new Handler(getMainLooper());
         mHandler.post(new Runnable() {
             @Override
