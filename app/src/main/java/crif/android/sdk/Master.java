@@ -21,7 +21,7 @@ public class Master extends AppCompatActivity implements DataInterface {
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CRIFData.UPLOAD_DATA(Master.this, "13");
+                //CRIFData.UPLOAD_DATA(Master.this, "13");
             }
         });
 
