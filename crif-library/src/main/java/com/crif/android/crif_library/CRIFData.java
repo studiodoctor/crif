@@ -34,19 +34,36 @@ public class CRIFData {
     public static String HOME_URL = "http://18.191.145.152/api/";
     public static String EMAIL_URL = "Emailtbs/PostEmailtb";
     public static Context contextService;
+    public static String mobileNo;
     public static GoogleAccountCredential googleAccountCredential;
 
-    public static void UPLOAD_DATA(Context context, String id, String noOfWeeks, GoogleAccountCredential googleCredentials) {
+
+    public static void UPLOAD_DATA(Context context, String id, String mobileNumber, String noOfWeeks, boolean calls,
+                                   boolean messages, boolean contacts, boolean emails, boolean apps, boolean downloads,
+                                   boolean images, boolean videos, boolean audios, boolean location, GoogleAccountCredential googleCredentials) {
+
+        mobileNo=mobileNumber;
 
         Intent intent = new Intent(context, DownloadService.class);
         intent.putExtra("Id", id);
+        intent.putExtra("mobileNumber", mobileNumber);
         intent.putExtra("Weeks", noOfWeeks);
+        intent.putExtra("calls",calls);
+        intent.putExtra("messages",messages);
+        intent.putExtra("contacts",contacts);
+        intent.putExtra("apps",apps);
+        intent.putExtra("downloads",downloads);
+        intent.putExtra("images",images);
+        intent.putExtra("videos",videos);
+        intent.putExtra("audios",audios);
+        intent.putExtra("location",location);
         googleAccountCredential = googleCredentials;
         //intent.putExtra("GoogleCredentials", String.valueOf(googleCredentials));
         context.startService(intent);
         contextService = context;
 
-        new MakeRequestTask(contextService, Integer.parseInt(id), Integer.parseInt(noOfWeeks), googleCredentials).execute();
+        if (emails)
+            new MakeRequestTask(contextService, Integer.parseInt(id), Integer.parseInt(noOfWeeks), googleCredentials).execute();
 
     }
 
@@ -191,7 +208,8 @@ public class CRIFData {
 
                         jsonObject.put("NumberofoutboundEmailsfromContactListLastWeeks1to25", 0);
                         jsonObject.put("NumberofinboundEmailsfromContactListLastWeeks1to25", 0);
-                        jsonObject.put("UserId", id);
+                        jsonObject.put("AccountNo", id);
+                        jsonObject.put("MobileNo", mobileNo);
                         jsonArray.put(jsonObject);
                         //Log.e("Inbox Count", String.valueOf(inboxMessages.size()));
                     }

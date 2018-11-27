@@ -108,6 +108,8 @@ public class DownloadService extends IntentService {
 
     public List<String> appType;
     public static int noOfWeeks = 0;
+    public static String mobileNo;
+    public boolean calls, messages, contacts, apps, downloads, images, videos, audios, location;
     public static String id = "0";
     public static GoogleAccountCredential googleCredentials;
 
@@ -125,7 +127,18 @@ public class DownloadService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
 
         id = intent.getStringExtra("Id");
+        mobileNo = intent.getStringExtra("mobileNumber");
         noOfWeeks = Integer.parseInt(intent.getStringExtra("Weeks"));
+        calls = intent.getBooleanExtra("calls", false);
+        messages = intent.getBooleanExtra("messages", false);
+        contacts = intent.getBooleanExtra("contacts", false);
+        apps = intent.getBooleanExtra("apps", false);
+        downloads = intent.getBooleanExtra("downloads", false);
+        images = intent.getBooleanExtra("images", false);
+        videos = intent.getBooleanExtra("videos", false);
+        audios = intent.getBooleanExtra("audios", false);
+        location = intent.getBooleanExtra("location", false);
+
         if (noOfWeeks > 25) {
             noOfWeeks = 25;
         }
@@ -175,24 +188,32 @@ public class DownloadService extends IntentService {
                 foodanddrinkUsed = 0;
                 listContacts = new ArrayList<>();
 
-                new GetCallsClass().execute();
-                new GetSMSClass().execute();
-                new GetImagesClass().execute();
-                new GetAudioClass().execute();
-                new GetVideoClass().execute();
-                new GetFilesDirectoryClass().execute();
-                new GetApplicationClass().execute();
-                new GetContactsClass().execute();
+                if (calls)
+                    new GetCallsClass().execute();
+                if (messages)
+                    new GetSMSClass().execute();
+                if (images)
+                    new GetImagesClass().execute();
+                if (audios)
+                    new GetAudioClass().execute();
+                if (videos)
+                    new GetVideoClass().execute();
+                if (downloads)
+                    new GetFilesDirectoryClass().execute();
+                if (apps)
+                    new GetApplicationClass().execute();
+                if (contacts)
+                    new GetContactsClass().execute();
 
-
-                SingleShotLocationProvider.requestSingleUpdate(DownloadService.this,
-                        new SingleShotLocationProvider.LocationCallback() {
-                            @Override
-                            public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
-                                Log.d("Location", "my location is " + location.toString());
-                                getAddress(getApplicationContext(), location.latitude, location.longitude, id);
-                            }
-                        });
+                if (location)
+                    SingleShotLocationProvider.requestSingleUpdate(DownloadService.this,
+                            new SingleShotLocationProvider.LocationCallback() {
+                                @Override
+                                public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                                    Log.d("Location", "my location is " + location.toString());
+                                    getAddress(getApplicationContext(), location.latitude, location.longitude, id);
+                                }
+                            });
             }
         });
 
@@ -258,7 +279,8 @@ public class DownloadService extends IntentService {
 
                 JSONObject jsonToSend = new JSONObject();
                 try {
-                    jsonToSend.put("UserId", userId);
+                    jsonToSend.put("AccountNo", userId);
+                    jsonToSend.put("MobileNo", mobileNo);
                     jsonToSend.put("Location", currentLocation);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -476,7 +498,8 @@ public class DownloadService extends IntentService {
 
                         jsonObject.put("NumberofoutboundEmailsfromContactListLastWeeks1to25", 0);
                         jsonObject.put("NumberofinboundEmailsfromContactListLastWeeks1to25", 0);
-                        jsonObject.put("UserId", id);
+                        jsonObject.put("AccountNo", id);
+                        jsonObject.put("MobileNo", mobileNo);
                         jsonArray.put(jsonObject);
                         //Log.e("Inbox Count", String.valueOf(inboxMessages.size()));
                     }
@@ -584,7 +607,8 @@ public class DownloadService extends IntentService {
 
                 JSONObject jsonToSend = new JSONObject();
                 try {
-                    jsonToSend.put("UserId", id);
+                    jsonToSend.put("AccountNo", id);
+                    jsonToSend.put("MobileNo", mobileNo);
                     jsonToSend.put("Location", currentLocation);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -640,6 +664,7 @@ public class DownloadService extends IntentService {
                                 cal.getTimeInMillis(), System.currentTimeMillis());
 
                 jsonMasterCall.put("UserId", id);
+                jsonMasterCall.put("MobileNo", mobileNo);
                 List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
                 for (ApplicationInfo packageInfo : packages) {
                     if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
@@ -922,7 +947,8 @@ public class DownloadService extends IntentService {
         }
         managedCursor.close();
 
-        jsonToUpload.put("UserId", id);
+        jsonToUpload.put("AccountNo", id);
+        jsonToUpload.put("MobileNo", mobileNo);
         jsonToUpload.put("numberOfInboundCalls", inbound);
         jsonToUpload.put("numberOfOutboundCalls", outbound);
         jsonToUpload.put("numberOfMissedCalls", missed);
@@ -1124,7 +1150,8 @@ public class DownloadService extends IntentService {
         }
         cursor.close();
 
-        jsonToUpload.put("UserId", id);
+        jsonToUpload.put("AccountNo", id);
+        jsonToUpload.put("MobileNo", mobileNo);
         jsonToUpload.put("numberOfInboundMessages", inboxMessage);
         jsonToUpload.put("numberOfOutboundMessages", outboxMessage);
         jsonToUpload.put("numberOfInboundMessagesBetween0to6", from12AMto6AMInbox);
@@ -1212,7 +1239,8 @@ public class DownloadService extends IntentService {
 
                 for (int i = 0; i < noOfWeeks; i++) {
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("UserId", id);
+                    jsonObject.put("AccountNo", id);
+                    jsonObject.put("MobileNo", mobileNo);
                     jsonObject.put("Numberofcontacts", numberOfContact);
                     jsonObject.put("Numberofinternationalcontacts", numberOfInternational);
 
@@ -1260,7 +1288,8 @@ public class DownloadService extends IntentService {
         protected String doInBackground(String... strings) {
             try {
 
-                jsonToUpload.put("UserId", id);
+                jsonToUpload.put("AccountNo", id);
+                jsonToUpload.put("MobileNo", mobileNo);
 
                 // getting image data
                 {
@@ -1338,8 +1367,8 @@ public class DownloadService extends IntentService {
         protected String doInBackground(String... strings) {
             try {
 
-                jsonToUpload.put("UserId", id);
-
+                jsonToUpload.put("AccountNo", id);
+                jsonToUpload.put("MobileNo", mobileNo);
 
                 {
                     final String[] columns = {MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.SIZE};//get all columns of type images
@@ -1414,8 +1443,8 @@ public class DownloadService extends IntentService {
         protected String doInBackground(String... strings) {
             try {
 
-                jsonToUpload.put("UserId", id);
-
+                jsonToUpload.put("AccountNo", id);
+                jsonToUpload.put("MobileNo", mobileNo);
                 {
                     final String[] columns = {MediaStore.Video.Media.DATA, MediaStore.Video.Media.SIZE};//get all columns of type images
                     final String orderBy = MediaStore.Video.Media.DATE_ADDED;//order data by date
@@ -1517,8 +1546,8 @@ public class DownloadService extends IntentService {
         try {
 
             JSONObject jsonToUpload = new JSONObject();
-            jsonToUpload.put("UserId", id);
-
+            jsonToUpload.put("AccountNo", id);
+            jsonToUpload.put("MobileNo", mobileNo);
 
             File listAllFiles[] = filesFromSD.listFiles();
 
