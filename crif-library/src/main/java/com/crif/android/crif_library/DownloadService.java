@@ -30,6 +30,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -115,6 +116,12 @@ public class DownloadService extends IntentService {
 
     public DownloadService() {
         super("MyService");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(context, "Data uploaded", Toast.LENGTH_SHORT).show();
     }
 
     @Override
