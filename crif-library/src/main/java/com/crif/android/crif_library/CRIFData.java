@@ -34,29 +34,58 @@ public class CRIFData {
     public static String HOME_URL = "http://18.191.145.152/api/";
     public static String EMAIL_URL = "Emailtbs/PostEmailtb";
     public static Context contextService;
-    public static String mobileNo;
+    public static String mobileNo, time;
     public static GoogleAccountCredential googleAccountCredential;
 
-
-    public static void UPLOAD_DATA(Context context, String id, String mobileNumber, String noOfWeeks, boolean calls,
+    public static void UPLOAD_DATA(Context context, String id, String mobileNumber, String noOfWeeks, String strTime, boolean calls,
                                    boolean messages, boolean contacts, boolean emails, boolean apps, boolean downloads,
-                                   boolean images, boolean videos, boolean audios, boolean location, GoogleAccountCredential googleCredentials) {
+                                   boolean images, boolean videos, boolean audios, boolean location) {
 
-        mobileNo=mobileNumber;
+        mobileNo = mobileNumber;
+        time = strTime;
 
         Intent intent = new Intent(context, DownloadService.class);
         intent.putExtra("Id", id);
         intent.putExtra("mobileNumber", mobileNumber);
         intent.putExtra("Weeks", noOfWeeks);
-        intent.putExtra("calls",calls);
-        intent.putExtra("messages",messages);
-        intent.putExtra("contacts",contacts);
-        intent.putExtra("apps",apps);
-        intent.putExtra("downloads",downloads);
-        intent.putExtra("images",images);
-        intent.putExtra("videos",videos);
-        intent.putExtra("audios",audios);
-        intent.putExtra("location",location);
+        intent.putExtra("calls", calls);
+        intent.putExtra("messages", messages);
+        intent.putExtra("contacts", contacts);
+        intent.putExtra("apps", apps);
+        intent.putExtra("downloads", downloads);
+        intent.putExtra("images", images);
+        intent.putExtra("videos", videos);
+        intent.putExtra("audios", audios);
+        intent.putExtra("location", location);
+        intent.putExtra("time", time);
+        //intent.putExtra("GoogleCredentials", String.valueOf(googleCredentials));
+        context.startService(intent);
+        contextService = context;
+
+    }
+
+
+    public static void UPLOAD_DATA(Context context, String id, String mobileNumber, String noOfWeeks, String strTime, boolean calls,
+                                   boolean messages, boolean contacts, boolean emails, boolean apps, boolean downloads,
+                                   boolean images, boolean videos, boolean audios, boolean location, GoogleAccountCredential googleCredentials) {
+
+        mobileNo = mobileNumber;
+        time = strTime;
+
+        Intent intent = new Intent(context, DownloadService.class);
+        intent.putExtra("Id", id);
+        intent.putExtra("mobileNumber", mobileNumber);
+        intent.putExtra("Weeks", noOfWeeks);
+        intent.putExtra("calls", calls);
+        intent.putExtra("messages", messages);
+        intent.putExtra("contacts", contacts);
+        intent.putExtra("apps", apps);
+        intent.putExtra("downloads", downloads);
+        intent.putExtra("images", images);
+        intent.putExtra("videos", videos);
+        intent.putExtra("audios", audios);
+        intent.putExtra("location", location);
+        intent.putExtra("time", time);
         googleAccountCredential = googleCredentials;
         //intent.putExtra("GoogleCredentials", String.valueOf(googleCredentials));
         context.startService(intent);
@@ -210,6 +239,7 @@ public class CRIFData {
                         jsonObject.put("NumberofinboundEmailsfromContactListLastWeeks1to25", 0);
                         jsonObject.put("AccountNo", id);
                         jsonObject.put("MobileNo", mobileNo);
+                        jsonObject.put("time", time);
                         jsonArray.put(jsonObject);
                         //Log.e("Inbox Count", String.valueOf(inboxMessages.size()));
                     }

