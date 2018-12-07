@@ -1,5 +1,6 @@
 package com.crif.android.crif_library;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -59,7 +60,15 @@ public class CRIFData {
         intent.putExtra("location", location);
         intent.putExtra("time", time);
         //intent.putExtra("GoogleCredentials", String.valueOf(googleCredentials));
-        context.startService(intent);
+        if(isMyServiceRunning(context,DownloadService.class))
+        {
+            context.stopService(intent);
+            context.startService(intent);
+        }else
+        {
+            context.startService(intent);
+        }
+
         contextService = context;
 
     }
@@ -88,12 +97,30 @@ public class CRIFData {
         intent.putExtra("time", time);
         googleAccountCredential = googleCredentials;
         //intent.putExtra("GoogleCredentials", String.valueOf(googleCredentials));
-        context.startService(intent);
+        if(isMyServiceRunning(context,DownloadService.class))
+        {
+            context.stopService(intent);
+            context.startService(intent);
+        }else
+        {
+            context.startService(intent);
+        }
+
         contextService = context;
 
         if (emails)
             new MakeRequestTask(contextService, Integer.parseInt(id), Integer.parseInt(noOfWeeks), googleCredentials).execute();
 
+    }
+
+    public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static class MakeRequestTask extends AsyncTask<Void, Void, Void> {
