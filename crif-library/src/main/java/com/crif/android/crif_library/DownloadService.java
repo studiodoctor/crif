@@ -295,6 +295,7 @@ public class DownloadService extends IntentService {
                 }
 
                 Log.e("Location-Data", "Uploaded");
+                Toast.makeText(context, "Location uploaded !!", Toast.LENGTH_SHORT).show();
                 new UploadData(HOME_URL + LOCATION_URL, jsonToSend).execute();
 //                tvAddress.setText(currentLocation);
             }
